@@ -6,6 +6,7 @@ import "./App.css";
 export const App = () => {
   const [breakTimer, setBreakTimer] = useState(5);
   const [sessionTimer, setSessionTimer] = useState(25);
+  const [seconds, setSeconds] = useState(0);
 
   const handleBreakDecrement = () => {
     if (breakTimer > 0) {
@@ -31,6 +32,20 @@ export const App = () => {
     }
   };
 
+  const handleSeconds = () => {
+    if (sessionTimer>0){
+      setSessionTimer(sessionTimer-1)
+      setSeconds(59)
+    }
+    
+  };
+
+  const handleReset = () => {
+    setBreakTimer(5);
+    setSessionTimer(25);
+    setSeconds(0);
+  };
+
   return (
     <div className="container">
       <div className="tittle">React 25+5 Clock</div>
@@ -51,14 +66,19 @@ export const App = () => {
 
       <div className="timer">
         <div className="tittle" id="timer-label">
-          Session/Break
+          <h3>{sessionTimer > 0 ? "Session" : "Break"}</h3>
         </div>
         <div className="display" id="time-left">
-          23:23
+          {sessionTimer > 0 ? sessionTimer : breakTimer} :
+          {seconds<10 ? ` 0${seconds}`: ` ${seconds}` }
         </div>
         <div className="buttons">
-          <button id="start_stop">start/stop</button>
-          <button id="reset">reset</button>
+          <button id="start_stop" onClick={handleSeconds}>
+            start/stop
+          </button>
+          <button id="reset" onClick={handleReset}>
+            reset
+          </button>
         </div>
       </div>
     </div>
