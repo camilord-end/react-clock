@@ -6,18 +6,18 @@ export const Controls = ({
 }) => {
   return (
     <div className={type}>
-      <div className="tittle" id="break-label">
+      <div className="tittle" id={`${type}-label`}>
         {type}
       </div>
       <div className="buttons">
-        <button id="break-decrement" onClick={decrementHandler}>
+        <button id={`${type}-decrement`} onClick={decrementHandler}>
           {type} decrement
         </button>
-        <button id="break-increment" onClick={incrementHandler}>
+        <button id={`${type}-increment`} onClick={incrementHandler}>
           {type} increment
         </button>
       </div>
-      <div className="display" id="break-length">
+      <div className="display" id={`${type}-length`}>
         {timer}
       </div>
     </div>

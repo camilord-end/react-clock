@@ -1,6 +1,7 @@
 import { useState } from "react";
-import "./App.css";
 import { Controls } from "./components/Controls";
+
+import "./App.css";
 
 export const App = () => {
   const [breakTimer, setBreakTimer] = useState(5);
