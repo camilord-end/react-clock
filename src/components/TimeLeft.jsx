@@ -1,6 +1,6 @@
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
-//import { useState, useEffect } from "react";
+import { FaUndo } from "react-icons/fa";
 
 momentDurationFormatSetup(moment);
 
@@ -9,15 +9,23 @@ export const TimeLeft = ({
   handler,
   startStopLabel,
   timeLeft,
+  handleReset,
 }) => {
   const formattedTimeLeft = moment
     .duration(timeLeft, "s")
     .format("mm:ss", { trim: false });
   return (
-    <div>
+    <div className="time-left-container">
       <h2 id="timer-label">{displayLabel}</h2>
       <p id="time-left">{formattedTimeLeft}</p>
-      <button id="start_stop" onClick={handler}>{startStopLabel}</button>
+      <div className="time-left-buttons">
+        <button id="start_stop" onClick={handler}>
+          {startStopLabel}
+        </button>
+        <button id="reset" onClick={handleReset}>
+          <FaUndo />
+        </button>
+      </div>
     </div>
   );
 };
