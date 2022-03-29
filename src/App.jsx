@@ -21,24 +21,39 @@ export const App = () => {
     setTimeLeft(sessionLength);
   }, [sessionLength]);
 
+  useEffect(() => {
+    if (timeLeft === 0) {
+      const newTheme = theme === "ligth" ? "dark" : "ligth";
+      setTheme(newTheme);
+      audioElement.current.play();
+      if (displayType === "Session") {
+        setDisplayType("Break");
+        setTimeLeft(breakLength);
+      } else if (displayType === "Break") {
+        setDisplayType("Session");
+        setTimeLeft(sessionLength);
+      }
+    }
+  }, [timeLeft, displayType, breakLength, sessionLength]);
+
   const handleBreakIncrement = () => {
-    breakLength < 3540 && setBreakLength(breakLength + 60);
+    const newBreakLength = breakLength + 60;
+    newBreakLength <= 3600 && setBreakLength(newBreakLength);
   };
 
   const handleBreakDecrement = () => {
-    if (breakLength > 60) {
-      setBreakLength(breakLength - 60);
-    }
+    const newBreakLength = breakLength - 60;
+    newBreakLength > 0 && setBreakLength(newBreakLength);
   };
 
   const handleSessionIncrement = () => {
-    setSessionLength(sessionLength + 60);
+    const newSessionLength = sessionLength + 60;
+    newSessionLength <= 3600 && setSessionLength(newSessionLength);
   };
 
   const handleSessionDecrement = () => {
-    if (sessionLength > 60) {
-      setSessionLength(sessionLength - 60);
-    }
+    const newSessionLength = sessionLength - 60;
+    newSessionLength > 0 && setSessionLength(newSessionLength);
   };
 
   const handleReset = () => {
@@ -59,19 +74,7 @@ export const App = () => {
       setIntervalId(null);
     } else {
       const newIntervalId = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          if (prevTime > 0) {
-            return prevTime - 1;
-          }
-          audioElement.current.play();
-          if (displayType === "Session") {
-            setDisplayType("Break");
-            setTimeLeft(breakLength);
-          } else if (displayType === "Break") {
-            setDisplayType("Session");
-            setTimeLeft(sessionLength);
-          }
-        });
+        setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
       setIntervalId(newIntervalId);
     }
