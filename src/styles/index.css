@@ -1,17 +1,17 @@
 :root {
   --background: #fff;
-  --text-primary: #6B21A8;
-  --text-secondary: #9333EA;
+  --text-primary: #6b21a8;
+  --text-secondary: #9333ea;
   --accent: #7e22ce;
-  --border: rgba(0, 0, 0, 0.12);
+  --border: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
   --background: #121212;
-  --text-primary: #99F6E4;
-  --text-secondary: #CCFBF1;
+  --text-primary: #5eead4;
+  --text-secondary: #ccfbf1;
   --accent: #99f6e4;
-  --border: rgba(255, 255, 255, 0.12);
+  --border: rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -37,7 +37,7 @@ body {
   margin: auto;
   padding: 1.5em;
   font-size: 1em;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 .controls {
@@ -56,7 +56,51 @@ body {
   flex-direction: column;
   text-align: center;
   font-size: 1.8em;
+  background: var(--border);
   border: 2px solid var(--accent);
   box-shadow: 0px 0px 20px var(--accent);
   border-radius: 5px;
+}
+
+.break {
+  border: 2px solid var(--accent);
+  box-shadow: 0px 0px 20px var(--accent);
+  border-radius: 5px;
+}
+
+#break-increment,#break-decrement {
+  color: var(--text-primary);
+  background: var(--background);
+  cursor: pointer;
+}
+
+#break-increment:hover,#break-decrement:hover {
+  color: var(--background);
+  background: var(--text-primary);
+}
+
+.session {
+  border: 2px solid var(--accent);
+  box-shadow: 0px 0px 20px var(--accent);
+  border-radius: 5px;
+}
+
+#session-increment,#session-decrement {
+  color: var(--text-primary);
+  background: var(--background);
+}
+
+#session-increment:hover,#session-decrement:hover {
+  color: var(--background);
+  background: var(--text-primary);
+}
+
+#start_stop,#reset {
+  color: var(--text-primary);
+  background: var(--border);
+}
+
+#start_stop:hover,#reset:hover {
+  color: var(--background);
+  background: var(--text-primary);
 }

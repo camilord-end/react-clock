@@ -1,0 +1,19 @@
+.time-left-container {
+  min-width: 300px;
+}
+
+.time-left-buttons {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  align-items: center;
+}
+
+#start_stop,#reset {
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  transition: all 0.5s;
+  cursor: pointer;
+}

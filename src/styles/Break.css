@@ -1,0 +1,23 @@
+.break {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.break-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  
+}
+
+#break-increment,#break-decrement {
+  transition: all 0.5s;
+  border-radius: 5px;
+  font-size: 0.8em;
+  text-align: center;
+  align-items: center;
+  border: none;
+}
