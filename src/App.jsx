@@ -1,86 +1,115 @@
-import { useState } from "react";
-import { Controls } from "./components/Controls";
+import { useState, useEffect, useRef } from "react";
 
-import "./App.css";
+import "./styles/App.css";
+import { FaPause, FaPlay, FaUndo } from "react-icons/fa";
+
+import { Break } from "./components/Break";
+import { Session } from "./components/Session";
+import { TimeLeft } from "./components/TimeLeft";
 
 export const App = () => {
-  const [breakTimer, setBreakTimer] = useState(5);
-  const [sessionTimer, setSessionTimer] = useState(25);
-  const [seconds, setSeconds] = useState(0);
+  const audioElement = useRef(null);
+  const [breakLength, setBreakLength] = useState(300);
+  const [sessionLength, setSessionLength] = useState(1500);
+  const [intervalId, setIntervalId] = useState(null);
+  const [displayType, setDisplayType] = useState("Session");
+  const [timeLeft, setTimeLeft] = useState(sessionLength);
 
-  const handleBreakDecrement = () => {
-    if (breakTimer > 0) {
-      setBreakTimer(breakTimer - 1);
-    }
-  };
+  useEffect(() => {
+    setTimeLeft(sessionLength);
+  }, [sessionLength]);
 
   const handleBreakIncrement = () => {
-    if (breakTimer < 60) {
-      setBreakTimer(breakTimer + 1);
-    }
+    if(breakLength> 3600)
+    setBreakLength(breakLength + 60);
   };
 
-  const handleSessionDecrement = () => {
-    if (sessionTimer > 0) {
-      setSessionTimer(sessionTimer - 1);
+  const handleBreakDecrement = () => {
+    if (breakLength > 60) {
+      setBreakLength(breakLength - 60);
     }
   };
 
   const handleSessionIncrement = () => {
-    if (sessionTimer < 60) {
-      setSessionTimer(sessionTimer + 1);
-    }
+    setSessionLength(sessionLength + 60);
   };
 
-  const handleSeconds = () => {
-    if (sessionTimer>0){
-      setSessionTimer(sessionTimer-1)
-      setSeconds(59)
+  const handleSessionDecrement = () => {
+    if (sessionLength > 60) {
+      setSessionLength(sessionLength - 60);
     }
-    
   };
 
   const handleReset = () => {
-    setBreakTimer(5);
-    setSessionTimer(25);
-    setSeconds(0);
+    audioElement.current.load();
+    clearInterval(intervalId);
+    setIntervalId(null);
+    setDisplayType("Session");
+    setSessionLength(1500);
+    setBreakLength(300);
+    setTimeLeft(1500);
+  };
+
+  const isStarted = intervalId !== null;
+
+  const handleStartStop = () => {
+    if (isStarted) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    } else {
+      const newIntervalId = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime > 0) {
+            return prevTime - 1;
+          }
+          audioElement.current.play();
+          if (displayType === "Session") {
+            setDisplayType("Break");
+            setTimeLeft(breakLength);
+          } else if (displayType === "Break") {
+            setDisplayType("Session");
+            setTimeLeft(sessionLength);
+          }
+        });
+      }, 1000);
+      setIntervalId(newIntervalId);
+    }
   };
 
   return (
     <div className="container">
-      <div className="tittle">React 25+5 Clock</div>
+      <div className="tittle">
+        <h1>React 25 + 5 Clock</h1>
+      </div>
       <div className="controls">
-        <Controls
-          type={"break"}
-          timer={breakTimer}
-          decrementHandler={handleBreakDecrement}
-          incrementHandler={handleBreakIncrement}
+        <Break
+          length={breakLength}
+          handleDecrement={handleBreakDecrement}
+          handleIncrement={handleBreakIncrement}
         />
-        <Controls
-          type={"session"}
-          timer={sessionTimer}
-          decrementHandler={handleSessionDecrement}
-          incrementHandler={handleSessionIncrement}
+        <Session
+          length={sessionLength}
+          handleDecrement={handleSessionDecrement}
+          handleIncrement={handleSessionIncrement}
         />
       </div>
-
-      <div className="timer">
-        <div className="tittle" id="timer-label">
-          <h3>{sessionTimer > 0 ? "Session" : "Break"}</h3>
-        </div>
-        <div className="display" id="time-left">
-          {sessionTimer > 0 ? sessionTimer : breakTimer} :
-          {seconds<10 ? ` 0${seconds}`: ` ${seconds}` }
-        </div>
-        <div className="buttons">
-          <button id="start_stop" onClick={handleSeconds}>
-            start/stop
-          </button>
-          <button id="reset" onClick={handleReset}>
-            reset
-          </button>
-        </div>
-      </div>
+      <TimeLeft
+        sessionLegth={sessionLength}
+        breakLength={breakLength}
+        displayLabel={displayType}
+        handler={handleStartStop}
+        startStopLabel={isStarted ? <FaPause /> : <FaPlay />}
+        timeLeft={timeLeft}
+      />
+      <button id="reset" onClick={handleReset}>
+        <FaUndo />
+      </button>
+      <audio id="beep" ref={audioElement}>
+        <source
+          src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+          type="audio/mpeg"
+        />
+      </audio>
     </div>
   );
 };
