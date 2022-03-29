@@ -4,7 +4,7 @@ import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 import "../styles/Break.css";
 
 export const Break = ({ length, handleIncrement, handleDecrement }) => {
-  const breakLengthMinutes = moment.duration(length, "s").minutes();
+  const breakLengthMinutes = moment.duration(length, "s").asMinutes();
 
   return (
     <div className="break">

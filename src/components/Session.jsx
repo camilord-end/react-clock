@@ -4,7 +4,7 @@ import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 import "../styles/Session.css";
 
 export const Session = ({ length, handleIncrement, handleDecrement }) => {
-  const sessionLengthMinutes = moment.duration(length, "s").minutes();
+  const sessionLengthMinutes = moment.duration(length, "s").asMinutes();
   return (
     <div className="session">
       <h3 id="session-label">Session</h3>
