@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import useLocalStorage from "use-local-storage";
 
 import "./styles/App.css";
 import { FaMoon, FaPause, FaPlay, FaSun } from "react-icons/fa";
@@ -14,14 +15,14 @@ export const App = () => {
   const [intervalId, setIntervalId] = useState(null);
   const [displayType, setDisplayType] = useState("Session");
   const [timeLeft, setTimeLeft] = useState(sessionLength);
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useLocalStorage("theme" ? "dark" : "ligth");
 
   useEffect(() => {
     setTimeLeft(sessionLength);
   }, [sessionLength]);
 
   const handleBreakIncrement = () => {
-    if (breakLength > 3600) setBreakLength(breakLength + 60);
+    breakLength < 3540 && setBreakLength(breakLength + 60);
   };
 
   const handleBreakDecrement = () => {
@@ -77,16 +78,12 @@ export const App = () => {
   };
 
   const handleDarkMode = () => {
-    if (theme === "dark") {
-      setTheme("ligth");
-    }
-    if (theme === "ligth") {
-      setTheme("dark");
-    }
+    const newTheme = theme === "ligth" ? "dark" : "ligth";
+    setTheme(newTheme);
   };
 
   return (
-    <div className="container">
+    <div className="container" data-theme={theme}>
       <div className="tittle">
         <h1>React 25 + 5 Clock</h1>
       </div>
@@ -102,15 +99,17 @@ export const App = () => {
           handleIncrement={handleSessionIncrement}
         />
       </div>
-      <TimeLeft
-        sessionLegth={sessionLength}
-        breakLength={breakLength}
-        displayLabel={displayType}
-        handler={handleStartStop}
-        startStopLabel={isStarted ? <FaPause /> : <FaPlay />}
-        timeLeft={timeLeft}
-        handleReset={handleReset}
-      />
+      <div className="time-left-container">
+        <TimeLeft
+          sessionLegth={sessionLength}
+          breakLength={breakLength}
+          displayLabel={displayType}
+          handler={handleStartStop}
+          startStopLabel={isStarted ? <FaPause /> : <FaPlay />}
+          timeLeft={timeLeft}
+          handleReset={handleReset}
+        />
+      </div>
       <div className="audio-container">
         <audio id="beep" ref={audioElement}>
           <source
@@ -120,10 +119,8 @@ export const App = () => {
         </audio>
       </div>
 
-      <div className="dark-mode-toggle">
-        <button id="toggle" onClick={handleDarkMode}>
-          {theme === "dark" ? <FaSun /> : <FaMoon />}
-        </button>
+      <div className="dark-mode-toggle" id="toggle" onClick={handleDarkMode}>
+        {theme === "dark" ? <FaSun /> : <FaMoon />}
       </div>
     </div>
   );

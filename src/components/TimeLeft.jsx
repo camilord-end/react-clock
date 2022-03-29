@@ -15,7 +15,7 @@ export const TimeLeft = ({
     .duration(timeLeft, "s")
     .format("mm:ss", { trim: false });
   return (
-    <div className="time-left-container">
+    <>
       <h2 id="timer-label">{displayLabel}</h2>
       <p id="time-left">{formattedTimeLeft}</p>
       <div className="time-left-buttons">
@@ -26,6 +26,6 @@ export const TimeLeft = ({
           <FaUndo />
         </button>
       </div>
-    </div>
+    </>
   );
 };
