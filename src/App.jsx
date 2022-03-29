@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 import "./styles/App.css";
-import { FaPause, FaPlay, FaUndo } from "react-icons/fa";
+import { FaMoon, FaPause, FaPlay, FaSun } from "react-icons/fa";
 
 import { Break } from "./components/Break";
 import { Session } from "./components/Session";
@@ -14,14 +14,14 @@ export const App = () => {
   const [intervalId, setIntervalId] = useState(null);
   const [displayType, setDisplayType] = useState("Session");
   const [timeLeft, setTimeLeft] = useState(sessionLength);
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
     setTimeLeft(sessionLength);
   }, [sessionLength]);
 
   const handleBreakIncrement = () => {
-    if(breakLength> 3600)
-    setBreakLength(breakLength + 60);
+    if (breakLength > 3600) setBreakLength(breakLength + 60);
   };
 
   const handleBreakDecrement = () => {
@@ -76,6 +76,15 @@ export const App = () => {
     }
   };
 
+  const handleDarkMode = () => {
+    if (theme === "dark") {
+      setTheme("ligth");
+    }
+    if (theme === "ligth") {
+      setTheme("dark");
+    }
+  };
+
   return (
     <div className="container">
       <div className="tittle">
@@ -100,16 +109,22 @@ export const App = () => {
         handler={handleStartStop}
         startStopLabel={isStarted ? <FaPause /> : <FaPlay />}
         timeLeft={timeLeft}
+        handleReset={handleReset}
       />
-      <button id="reset" onClick={handleReset}>
-        <FaUndo />
-      </button>
-      <audio id="beep" ref={audioElement}>
-        <source
-          src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
-          type="audio/mpeg"
-        />
-      </audio>
+      <div className="audio-container">
+        <audio id="beep" ref={audioElement}>
+          <source
+            src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+            type="audio/mpeg"
+          />
+        </audio>
+      </div>
+
+      <div className="dark-mode-toggle">
+        <button id="toggle" onClick={handleDarkMode}>
+          {theme === "dark" ? <FaSun /> : <FaMoon />}
+        </button>
+      </div>
     </div>
   );
 };
